@@ -13,7 +13,24 @@ data class SMTPConfig(
     val password: String?=null
 )
 
-enum class SMTPSecure(val value: String) {
+// Attaching point for the extension function which provides the answer
+interface EnumCompanion<T : Enum<T>>
+
+// Marker interface to provide the common data
+interface WithAlias {
+    val alias: String
+}
+
+// searching by alias support
+inline fun <reified T> EnumCompanion<T>.fromAlias(
+    value: String
+): T? where T : Enum<T>, T : WithAlias {
+    return enumValues<T>().firstOrNull { it.alias == value }
+}
+
+enum class SMTPSecure(override val alias: String): WithAlias {
     SSL("ssl"),
-    TLS("tls")
+    TLS("tls");
+
+    companion object : EnumCompanion<SMTPSecure>
 }
