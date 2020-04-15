@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.apache.commons.mail.DefaultAuthenticator
 import org.apache.commons.mail.Email
 import org.apache.commons.mail.HtmlEmail
+import org.apache.commons.mail.EmailConstants.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -29,6 +30,7 @@ class Mail(private val coroutineScope: CoroutineScope?, private val config: SMTP
         }
     var fromName: String = ""
     var fromEmail: String = ""
+    var charset = UTF_8
     private var isHtml: Boolean = false
 
     private fun prepareEmail(): Email {
@@ -61,6 +63,8 @@ class Mail(private val coroutineScope: CoroutineScope?, private val config: SMTP
         for (entry in this.to.entries) {
             email.addTo(entry.key, entry.value)
         }
+
+        email.setCharset(charset);
 
         return email
     }
