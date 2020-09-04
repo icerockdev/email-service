@@ -13,9 +13,5 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - uses: eskatos/gradle-command-action@v1
-      with:
-        arguments: build
-    - uses: eskatos/gradle-command-action@v1
-      with:
-        arguments: :email-service:publish -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }} -PlibraryPublish
+    - name: Build and publish to Bintray
+      run: ./gradlew :email-service:publish -DBINTRAY_USER=${{ secrets.BINTRAY_USER }} -DBINTRAY_KEY=${{ secrets.BINTRAY_KEY }} -PlibraryPublish
