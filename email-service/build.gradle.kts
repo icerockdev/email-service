@@ -13,10 +13,10 @@ apply(plugin = "java")
 apply(plugin = "kotlin")
 
 group = "com.icerockdev.service"
-version = "0.0.3"
+version = "0.1.0"
 
 val sourcesJar by tasks.registering(Jar::class) {
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
 }
 
@@ -26,7 +26,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${properties["coroutines_version"]}")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-email
-    implementation(group = "org.apache.commons", name = "commons-email", version = "${properties["common_email_version"]}")
+    implementation(
+        group = "org.apache.commons",
+        name = "commons-email",
+        version = "${properties["common_email_version"]}"
+    )
     // logging
     implementation("ch.qos.logback:logback-classic:${properties["logback_version"]}")
 
@@ -39,13 +43,13 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 }
 
