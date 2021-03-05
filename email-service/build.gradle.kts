@@ -25,11 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${properties["coroutines_version"]}")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-email
-    implementation(
-        group = "org.apache.commons",
-        name = "commons-email",
-        version = "${properties["common_email_version"]}"
-    )
+    implementation("org.apache.commons:commons-email:${properties["common_email_version"]}")
     // logging
     implementation("ch.qos.logback:logback-classic:${properties["logback_version"]}")
 
