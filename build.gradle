@@ -16,7 +16,7 @@ allprojects {
 
     plugins.withId('org.jetbrains.kotlin.jvm', { _ ->
         compileJava.dependsOn copyLibsCompile
-        sourceCompatibility=JavaVersion.VERSION_1_8
+        sourceCompatibility=JavaVersion.VERSION_11
     })
 
     task copyLibsCompile(type: Copy) {
