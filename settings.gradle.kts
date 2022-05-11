@@ -5,13 +5,11 @@ pluginManagement {
     repositories {
         mavenLocal()
         gradlePluginPortal()
-        jcenter()
         google()
         maven { // The google mirror is less flaky than mavenCentral()
             url = uri("https://maven-central.storage-download.googleapis.com/repos/central/data/")
         }
         maven { url = uri ("https://plugins.gradle.org/m2/") }
-        maven { url = uri ("https://dl.bintray.com/kotlin/kotlin") }
     }
 
     resolutionStrategy {
@@ -31,7 +29,7 @@ include(":email-service")
 val properties = startParameter.projectProperties
 
 // ./gradlew -PlibraryPublish publishToMavenLocal
-// ./gradlew -DBINTRAY_USER=user -DBINTRAY_KEY=key -PlibraryPublish :email-service:publish
+// ./gradlew :email-service:publish -PlibraryPublish
 val libraryPublish: Boolean = properties.containsKey("libraryPublish")
 if(!libraryPublish) {
 //    include(":sample")
