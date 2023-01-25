@@ -16,7 +16,7 @@ apply(plugin = "java")
 apply(plugin = "kotlin")
 
 group = "com.icerockdev.service"
-version = "0.2.0"
+version = "0.3.0"
 
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
@@ -35,9 +35,6 @@ dependencies {
     // tests
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:${properties["kotlin_version"]}")
     testImplementation(group = "com.github.kirviq", name = "dumbster", version = "1.7.1")
-    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all
-    testImplementation(group = "org.hamcrest", name = "hamcrest-all", version = "1.3")
-
 }
 
 java {
@@ -108,6 +105,7 @@ publishing {
         }
 
         signing {
+            setRequired({!properties.containsKey("libraryPublishToMavenLocal")})
             val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
             val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
             val signingKey: String? = System.getenv("SIGNING_KEY")?.let { base64Key ->

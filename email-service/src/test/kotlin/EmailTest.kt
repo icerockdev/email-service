@@ -9,18 +9,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.*
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 class EmailTest {
-
-    private var server: SimpleSmtpServer? = null
+    private lateinit var server: SimpleSmtpServer
+    private lateinit var mailerService: MailerService
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private var mailerService: MailerService? = null
 
     @Before
     fun setUp() {
@@ -29,7 +29,7 @@ class EmailTest {
             scope,
             SMTPConfig(
                 host = "localhost",
-                port = server!!.port
+                port = server.port
             )
         )
     }
@@ -37,14 +37,14 @@ class EmailTest {
     @After
     @Throws(Exception::class)
     fun tearDown() {
-        server?.stop()
+        server.stop()
     }
 
     @Test
     fun testSend() {
 
         runBlocking {
-            mailerService!!.compose().apply {
+            mailerService.compose().apply {
                 fromEmail = "from@icerockdev.com"
                 fromName = "From Person"
                 subject = "TEST EMAIL"
@@ -54,16 +54,16 @@ class EmailTest {
                 .join()
         }
 
-        val emails = server!!.receivedEmails
-        assertThat(emails, hasSize(1))
+        val emails = server.receivedEmails
+        assertEquals(expected = 1, actual = emails.size)
         val email = emails[0]
-        assertThat(email.getHeaderValue("Subject"), `is`("TEST EMAIL"))
-        assertThat(email.body, containsString("<h1>Test test test</h1>"))
-        assertThat(email.headerNames, hasItem("Date"))
-        assertThat(email.headerNames, hasItem("From"))
-        assertThat(email.headerNames, hasItem("To"))
-        assertThat(email.headerNames, hasItem("Subject"))
-        assertThat(email.getHeaderValues("To"), contains("Test Person <to@icerockdev.com>"))
-        assertThat(email.getHeaderValue("To"), `is`("Test Person <to@icerockdev.com>"))
+
+        assertEquals(expected = "TEST EMAIL", actual = email.getHeaderValue("Subject"))
+        assertContains(email.body, "<h1>Test test test</h1>")
+        assertTrue { email.headerNames.contains("Date") }
+        assertTrue { email.headerNames.contains("From") }
+        assertTrue { email.headerNames.contains("To") }
+        assertEquals(expected = 1, email.getHeaderValues("To").size)
+        assertTrue { email.getHeaderValues("To").contains("Test Person <to@icerockdev.com>") }
     }
 }
