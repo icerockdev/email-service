@@ -28,7 +28,7 @@ include(":email-service")
 //
 val properties = startParameter.projectProperties
 
-// ./gradlew -PlibraryPublish publishToMavenLocal
+// ./gradlew -PlibraryPublish -PlibraryPublishToMavenLocal publishToMavenLocal
 // ./gradlew :email-service:publish -PlibraryPublish
 val libraryPublish: Boolean = properties.containsKey("libraryPublish")
 if(!libraryPublish) {
