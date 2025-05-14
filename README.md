@@ -8,7 +8,7 @@ repositories {
 }
 
 // Append dependency
-implementation("com.icerockdev.service:email-service:0.3.0")
+implementation("com.icerockdev.service:email-service:0.4.0")
 ````
 
 ## Library usage
@@ -38,6 +38,12 @@ implementation("com.icerockdev.service:email-service:0.3.0")
         subject = "TEST EMAIL"
         to = mutableMapOf("to@icerockdev.com" to "Test Person")
         html = "<h1>Test test test</h1>"
+        attachments = listOf(
+            Mail.Attachment(
+                file = File("test.pdf"),
+                name = "test.pdf"
+            )
+        )
     }.sendAsync()
 ````
  
