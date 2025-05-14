@@ -9,10 +9,16 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.apache.commons.mail.DefaultAuthenticator
 import org.apache.commons.mail.Email
+import org.apache.commons.mail.EmailConstants.UTF_8
 import org.apache.commons.mail.HtmlEmail
-import org.apache.commons.mail.EmailConstants.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
+import java.net.URL
+import javax.activation.DataSource
+import javax.activation.FileDataSource
+import javax.activation.URLDataSource
+import javax.mail.util.ByteArrayDataSource
 
 class Mail(private val coroutineScope: CoroutineScope?, private val config: SMTPConfig) {
 
@@ -31,6 +37,7 @@ class Mail(private val coroutineScope: CoroutineScope?, private val config: SMTP
     var fromName: String = ""
     var fromEmail: String = ""
     var charset = UTF_8
+    var attachments: List<Attachment> = emptyList()
     private var isHtml: Boolean = false
 
     private fun prepareEmail(): Email {
@@ -64,14 +71,16 @@ class Mail(private val coroutineScope: CoroutineScope?, private val config: SMTP
             email.addTo(entry.key, entry.value)
         }
 
-        email.setCharset(charset);
+        email.setCharset(charset)
+        attachments.forEach { attachment ->
+            email.attach(attachment.dataSource, attachment.name, attachment.description)
+        }
 
         return email
     }
 
     fun send() {
-        val email = prepareEmail()
-        email.send()
+        prepareEmail().send()
     }
 
     fun sendAsync(): Job {
@@ -84,9 +93,25 @@ class Mail(private val coroutineScope: CoroutineScope?, private val config: SMTP
             try {
                 email.send()
             } catch (t: Throwable) {
-                LOGGER.error(t.localizedMessage)
+                LOGGER.error(t.localizedMessage, t)
             }
         }
+    }
+
+    class Attachment(
+        val dataSource: DataSource,
+        val name: String,
+        val description: String? = null
+    ) {
+        constructor(file: File, name: String, description: String? = null) : this(
+            FileDataSource(file), name, description
+        )
+
+        constructor(url: URL, name: String, description: String? = null) : this(URLDataSource(url), name, description)
+
+        constructor(data: ByteArray, name: String, description: String? = null, charset: String = UTF_8) : this(
+            ByteArrayDataSource(data, "application/octet-stream;charset=$charset"), name, description
+        )
     }
 
     private companion object {
