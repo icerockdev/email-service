@@ -13,7 +13,7 @@ allprojects {
         maybeCreate("provided")
     }
 
-    val copyLibsCompileTask = tasks.create("copyLibsCompile", Copy::class.java) {
+    val copyLibsCompileTask = tasks.register("copyLibsCompile", Copy::class.java) {
         from(configurations["runtimeClasspath"])
         into(File(project.rootDir, "build/libs"))
     }
@@ -27,6 +27,6 @@ allprojects {
     }
 }
 
-tasks.create("clean", Delete::class.java) {
-    delete(rootProject.buildDir)
+tasks.register("clean", Delete::class.java) {
+    delete(rootProject.layout.buildDirectory)
 }
