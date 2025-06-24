@@ -13,11 +13,19 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build and publish to mavenCentral
+      - name: Build and publish to directory
         env:
           OSSRH_USER: ${{ secrets.OSSRH_USER }}
           OSSRH_KEY: ${{ secrets.OSSRH_KEY }}
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEYID }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
           SIGNING_KEY: ${{ secrets.GPG_KEY_CONTENTS }}
-        run: ./gradlew publish -PlibraryPublish
+        run: ./gradlew jreleaserConfig build publish -PlibraryPublish
+      - name: Publish to Maven Central Repository
+        env:
+          OSSRH_USER: ${{ secrets.OSSRH_USER }}
+          OSSRH_KEY: ${{ secrets.OSSRH_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEYID }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.GPG_KEY_CONTENTS }}
+        run: ./gradlew jreleaserFullRelease -PlibraryPublish
