@@ -37,12 +37,17 @@ implementation("com.icerockdev.service:email-service:0.5.2")
         fromName = "From Person"
         subject = "TEST EMAIL"
         to = mutableMapOf("to@icerockdev.com" to "Test Person")
-        html = "<h1>Test test test</h1>"
+        html = "<h1>Test test test</h1><img src=\"cid:testpng\">"
         attachments = listOf(
             Mail.Attachment(
                 file = File("test.pdf"),
                 name = "test.pdf"
             )
+        )
+        inlineAttachments = listOf(
+            file = File("test.png"),
+            cidName = "testpng",
+            name = "test.png"
         )
     }.sendAsync()
 ````
