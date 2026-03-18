@@ -8,7 +8,7 @@ repositories {
 }
 
 // Append dependency
-implementation("com.icerockdev.service:email-service:0.5.2")
+implementation("com.icerockdev.service:email-service:1.0.0")
 ````
 
 ## Library usage
