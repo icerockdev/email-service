@@ -19,7 +19,7 @@ apply(plugin = "java")
 apply(plugin = "kotlin")
 
 group = "com.icerockdev.service"
-version = "0.5.2"
+version = "1.0.0"
 
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
@@ -33,7 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${properties["coroutines_version"]}")
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-email
-    implementation("org.apache.commons:commons-email:${properties["common_email_version"]}")
+    implementation("org.apache.commons:commons-email2-jakarta:${properties["common_email2_version"]}")
     // logging
     implementation("ch.qos.logback:logback-classic:${properties["logback_version"]}")
 
@@ -144,4 +144,3 @@ jreleaser {
         }
     }
 }
-
